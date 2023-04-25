@@ -18,7 +18,7 @@ temp = []
 # Set target website
 website = 'http://www.tokopedia.com/'
 # Set path untuk chrome driver
-PATH = 'Scrapping/chromedriver'
+PATH = 'chromedriver'
 
 # Create driver untuk ngebuka chrome
 driver = webdriver.Chrome(PATH)
