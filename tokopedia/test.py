@@ -6,8 +6,17 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
+from urllib.parse import urlparse
+from urllib.parse import parse_qs
 import pandas as pd
 #import datetime
+
+
+def get_url_parameter(url, param):
+    parsed_url = urlparse(url)
+    captured_value = parse_qs(parsed_url.query)[param][0]
+    print(captured_value)
+    return captured_value
 
 # Inisialisasi variable
 search_key = 'Samsung s21'
@@ -16,7 +25,7 @@ check_available = False
 # temp untuk menyimpan semua data
 temp = []
 # Set target website
-website = 'https://ta.tokopedia.com/promo/v1/clicks/8a-xgVY2gmUEH_1f6_eOH_HNbm-xgVY789CBUsthbm-Orfua9fBjUstiH_nfH_JRoAnibm-pg9opq3YX9fBjUsti69t7H3KarIxFzJB3_MhIZpzhy7ydr3hogMzF8uzgeO2Uo3yOrjyhHBz13B-JquPHeSour_rh_3oW_pVgojJF8AraZ7zggVUdrjziz1NAoOBBejxzHaO-o72iZfjp_7xVyfgzqBoIe9xSP32S8_uH8JFO8_xIqjY081gNe_BizS1ibm-7q3OBUsthosKaoAeF6_rabm-srcHi6sKFHmFircYpq9z2Qfdi6sJDUMVDgaUEUSo7QuY0rfuS9fFp9fFa9fFhUiFiQSuWyMua9fYM9fVjraUEHsnDUMNOQ3-BrBYxgIowrMuhUstaHmFiyfV79fBjraUE3pyObAyfbArf9ZFiQBYsy3Njq3zxPcuwy3zpUsta6A1DUMVi9RzBrRei6i-6UiFirMYDQcuXyfuwPMVaq3VXPVYXy3OBUstiyfYXPI-5QVYfy9-2y3N7UiFirMYDQcuXyfuwg9xFg9-2Q3uXPVYXy3OBUstigMNi9RP2gcPBPmUDUSC5rRzwy3hSUstiyRCs9RotQRCwP3NhUiFiPMuarfB5QiUEUSyaUiFiy3zwrfo5rM1i6seOHZdaHAKdHsep6_rfopyObm-pHOYDQfri6i-B812kgJxGgBBXZSgjH7NDZ325q1OAZ9o-Q1dFyfFN8B29zSBgHMP2_fB-8JN2oA-6qBja_M2gHjNk3_-6qBja_M2zq1hAZS-q3cFpysoGqOKp_M2iH72DZ325q1OAZ9o-Q_ufyMO6QJBkQfBgHjjF_jzoHOBEyRzguVuR3uHFHJOIu_-Hu7jh_jzCPJda39B6Hj7O_s-zoJda3_V-q9P2ysoGrVtaQIuyHB-Dy7yNrV2AZ_g-qjV2_JoGPMoWQcNxupuMy7xGPB2UuM2jzsBF3jo-ojBke3BHe72fyfODQMV9o3gsHMxfy7yNrV2AZ_g-qjV2_JoG8cz9uSBBusjF3uPj8jBkQfBizJ2pysoj6cgIPRxizpjpgjxd8MzIH_xMzjNc1snhzBzD1Mg_u_uVuRBj8BB9H92jupuXZ1xo81O_gczMZIxayp-3QMgU8IooH_Kp_MNd6V1Fujx1uugvujyNzBz0gc-GH7NtyBx6H3-WyfPs8jBdZsJh6cgI_MB-q9P2yp-6PMoWuMggQj2fgAo6QJBkQfBoqB17_c20HJNJZ926qj7p_92uo1NE13BHe72E3_UN8u23692qu7gN3_-Sq1Y2Z9268jBO_uzsoJN11_zoqBVR_S2sH1Y1yfBM1_7YUiFiyfhOrRzBrBY2gVYfHiUEoAna6AHDUMoxPcuSQR-N9RoOgfPBrRzwy9z7rMBiP9zBUs2QUsHFo_eibmUf6ZUDUsrFUiFiopyibmUpHAypUB7DUSCaq3oB9f-2gmUE6AnFbm-SQfVD9fBjUstabm-Mq3NxQVYag3hay3N09fVjrfo5rM1i6seNHadp6_jfH_rpoAKaHpyabm-hP3ua8uYag3hay3N09RosQR-BUstFbsJFopnhHsUf6AydoA1Nosrawe?page=2&ob=23&r=https%3A%2F%2Fwww.tokopedia.com%2Fsmartincase%2Fhydrogel-samsung-s21-s21-fe-tempered-glass-screen-guard-anti-gores-samsung-s21%3FextParam%3Divf%253Dfalse%26src%3Dtopads&pub_domain=0&management_type=1&dv=desktop&is_search=1&pub_id=0&pub_unit=0&t=desktop&src=search&keywords=samsung+s21'
+website = 'http://www.tokopedia.com/'
 # Set path untuk chrome driver
 PATH = 'chromedriver'
 
