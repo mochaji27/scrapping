@@ -6,8 +6,17 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
+from urllib.parse import urlparse
+from urllib.parse import parse_qs
 import pandas as pd
 #import datetime
+
+
+def get_url_parameter(url, param):
+    parsed_url = urlparse(url)
+    captured_value = parse_qs(parsed_url.query)[param][0]
+    print(captured_value)
+    return captured_value
 
 # Inisialisasi variable
 search_key = 'Samsung s21'
@@ -55,30 +64,26 @@ for i in range(1, total_page+1):
         #body = driver.find_elements(By.CLASS_NAME, 'css-jza1fo')
         list_item = body[ii].find_elements(By.CSS_SELECTOR, 'a.css-gwkf0u')
         print('list_item' + str(len(list_item)))
-        
         for iii in range(0, len(list_item)):
+            url_product = list_item[iii].get_attribute('href')
             title = list_item[iii].find_element(By.CSS_SELECTOR, 'div.css-3um8ox').text
             price = list_item[iii].find_element(By.CSS_SELECTOR, 'div.css-1ksb19c').text
-            if list_item[iii].find_elements(By.TAG_NAME, 'span')[0].text == 'Ad':
-                location = list_item[iii].find_elements(By.TAG_NAME, 'span')[1].text
-                toko = list_item[iii].find_elements(By.TAG_NAME, 'span')[2].text
-            else:    
-                location = list_item[iii].find_elements(By.TAG_NAME, 'span')[0].text
-                toko = list_item[iii].find_elements(By.TAG_NAME, 'span')[1].text
-            temp.append((title, price, location, toko, i))
+            location = list_item[iii].find_elements(By.TAG_NAME, 'span')[0].text
+            toko = list_item[iii].find_elements(By.TAG_NAME, 'span')[1].text
+            url_product = url_product if 'ta.tokopedia.com' not in url_product else get_url_parameter(url_product, param='r')
+            temp.append((title, price, location, toko, url_product, i))
+            
             #print(temp)
-    #print(temp)
+    print(temp)
     #print(i)
     next_page = 'https://www.tokopedia.com/search?navsource=home&page=' + str(i) + '&q=' + search_key + '&st=product'
     driver.get(next_page)
 
 driver.quit() 
 if check_available == True:       
-    df = pd.DataFrame(temp, columns=('Title', 'Price', 'Location', 'Toko', 'Page'))
+    df = pd.DataFrame(temp, columns=('Title', 'Price', 'Location', 'Toko', 'URL', 'Page'))
     print(df)
     df.to_excel(f'tokopedia/result_{search_key}_{total_page}page.xlsx', sheet_name='sheet1')
 else:
     print('No data has found')
-
-
 
