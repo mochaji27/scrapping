@@ -2,11 +2,10 @@
 from selenium import webdriver
 #from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-import time
 #from selenium.webdriver.support.ui import WebDriverWait
 #from selenium.webdriver.support import expected_conditions as EC
 import pandas as pd
-import datetime
+from utils.general_function import get_datetime
 
 # Inisialisasi variable
 # set_index_body untuk menentukan tbody keberapa yang akan kita ambil
@@ -23,7 +22,7 @@ date = ''
 website = 'https://www.knak.jp/japan/naphtha.htm'
 # Set path untuk chrome driver
 PATH = 'Scrapping/chromedriver'
-
+datetime = get_datetime('%d/%m/%Y %H:%M:%S')
 # Create driver untuk ngebuka chrome
 driver = webdriver.Chrome(PATH)
 
@@ -60,7 +59,6 @@ for i in range(0, len(list_row)):
         if '/' in list_col[ii].text:
             # menambahkan check_slash 1 agar next cell akan kita ambil
             check_slash += 1
-            #print(list_col[ii].text)
             # menyimpan data date
             date = list_col[ii].text
             
@@ -72,4 +70,5 @@ driver.quit()
 # membuat data temp menjadi dataframe
 df = pd.DataFrame(temp, columns=('MonthKey', 'Value', 'Currency', 'Material'))
 df = df.sort_values(by = ['MonthKey'])
+df.to_excel(f'knak/result_{datetime}.xlsx', sheet_name='sheet1')
 print(df)

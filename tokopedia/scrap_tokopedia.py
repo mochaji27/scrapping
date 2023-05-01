@@ -1,3 +1,7 @@
+import sys
+sys.path.append('\plugins')
+print(sys.path)
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -6,21 +10,19 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
-from urllib.parse import urlparse
-from urllib.parse import parse_qs
+from tokopedia_function import get_url_parameter
+from plugins.utils import general_function
 import pandas as pd
+
+
+
 #import datetime
+datetime = get_datetime('%d/%m/%Y %H:%M:%S')
 
-
-def get_url_parameter(url, param):
-    parsed_url = urlparse(url)
-    captured_value = parse_qs(parsed_url.query)[param][0]
-    print(captured_value)
-    return captured_value
 
 # Inisialisasi variable
-search_key = 'Samsung s21'
-total_page = 3
+search_key = 'iphone 14 pro'
+total_page = 5
 check_available = False
 # temp untuk menyimpan semua data
 temp = []
@@ -40,12 +42,12 @@ search.send_keys(search_key)
 search.send_keys(Keys.RETURN)
 
 for i in range(1, total_page+1):
-    time.sleep(2)
+    #time.sleep(2)
     check_footer = False
     while True:
         try:
             driver.execute_script("window.scrollTo(200, 1000)") 
-            time.sleep(0.8)
+            #time.sleep(0.8)
             footer = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, 'css-gvoll6')))
             actions = ActionChains(driver)
             actions.move_to_element(footer).perform()
@@ -59,11 +61,9 @@ for i in range(1, total_page+1):
     if check_footer == False:
         break
     body = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'css-jza1fo')))
-    print('list body : ' + str(len(body)))
     for ii in range(0, len(body)):
         #body = driver.find_elements(By.CLASS_NAME, 'css-jza1fo')
         list_item = body[ii].find_elements(By.CSS_SELECTOR, 'a.css-gwkf0u')
-        print('list_item' + str(len(list_item)))
         for iii in range(0, len(list_item)):
             url_product = list_item[iii].get_attribute('href')
             title = list_item[iii].find_element(By.CSS_SELECTOR, 'div.css-3um8ox').text
@@ -74,7 +74,6 @@ for i in range(1, total_page+1):
             temp.append((title, price, location, toko, url_product, i))
             
             #print(temp)
-    print(temp)
     #print(i)
     next_page = 'https://www.tokopedia.com/search?navsource=home&page=' + str(i) + '&q=' + search_key + '&st=product'
     driver.get(next_page)
@@ -82,8 +81,9 @@ for i in range(1, total_page+1):
 driver.quit() 
 if check_available == True:       
     df = pd.DataFrame(temp, columns=('Title', 'Price', 'Location', 'Toko', 'URL', 'Page'))
-    print(df)
-    df.to_excel(f'tokopedia/result_{search_key}_{total_page}page.xlsx', sheet_name='sheet1')
+    #df['Price_fix'] = df['Price'].str.replace('Rp','').str.replace('.', '')
+    print(df.head())
+    df.to_excel(f'tokopedia/result_{search_key}_{total_page} page_{datetime}.xlsx', sheet_name='sheet1')
 else:
     print('No data has found')
 
