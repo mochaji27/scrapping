@@ -1,6 +1,4 @@
-import sys
-sys.path.append('\plugins')
-print(sys.path)
+
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -11,13 +9,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
 from tokopedia_function import get_url_parameter
-from plugins.utils import general_function
 import pandas as pd
+from datetime import datetime
 
 
-
-#import datetime
-datetime = get_datetime('%d/%m/%Y %H:%M:%S')
+now = datetime.now()
+# dd/mm/YY H:M:S
+dt_string = now.strftime('%d-%m-%Y %H-%M-%S')
 
 
 # Inisialisasi variable
@@ -75,6 +73,8 @@ for i in range(1, total_page+1):
             
             #print(temp)
     #print(i)
+    if total_page == 1:
+        break
     next_page = 'https://www.tokopedia.com/search?navsource=home&page=' + str(i) + '&q=' + search_key + '&st=product'
     driver.get(next_page)
 
@@ -83,7 +83,7 @@ if check_available == True:
     df = pd.DataFrame(temp, columns=('Title', 'Price', 'Location', 'Toko', 'URL', 'Page'))
     #df['Price_fix'] = df['Price'].str.replace('Rp','').str.replace('.', '')
     print(df.head())
-    df.to_excel(f'tokopedia/result_{search_key}_{total_page} page_{datetime}.xlsx', sheet_name='sheet1')
+    df.to_excel(f'selenium/tokopedia/result_{search_key}_{total_page} page_{dt_string}.xlsx', sheet_name='sheet1')
 else:
     print('No data has found')
 
