@@ -2,6 +2,10 @@ import scrapy
 from pathlib import Path
 from datetime import datetime
 
+class Product(scrapy.Item):
+    date = scrapy.Field()
+    value = scrapy.Field()
+
 class KnakSpider(scrapy.Spider):
     name = 'knak'
 
@@ -34,10 +38,8 @@ class KnakSpider(scrapy.Spider):
                         except:
                             date = '0' + date
                             monthkey = datetime.strptime(date, '%y/%m').strftime('%Y%m')
-                    yield{
-                        'date' : monthkey,
-                        'value' : value
-                    }
+                    product = Product(date = monthkey, value = value)
+                    yield product
                 if '/' in list_td and len(list_td) <= 5:
                     # menambahkan check_slash 1 agar next cell akan kita ambil
                     check_slash += 1
