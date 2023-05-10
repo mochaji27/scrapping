@@ -1,6 +1,9 @@
 import scrapy
 from pathlib import Path
 from datetime import datetime
+from scrapy.spiders import Rule 
+from scrapy.linkextractors import LinkExtractor
+import re
 
 class Product(scrapy.Item):
     name = scrapy.Field()
@@ -12,6 +15,7 @@ class AmazonSpider(scrapy.Spider):
     name = 'amazon'
     search = 'iphone 14 pro'
     base_url = 'http://www.amazon.com'
+    total_page = 3
 
     allowed_domains = ['amazon.com']
 
@@ -19,6 +23,7 @@ class AmazonSpider(scrapy.Spider):
             f'{base_url}/s?k={search}'
         ]
         
+
 
     def parse(self, response):
         list_item = response.xpath('//div[@class="sg-col-inner"]')[4:]
@@ -34,9 +39,19 @@ class AmazonSpider(scrapy.Spider):
             full_url_item = f"{self.base_url}{url_item}"
             print(full_url_item)
             yield scrapy.Request(full_url_item, callback=self.parse_item_detail)
-    
+        self.total_page -= 1
+        next_page = response.xpath('//a[@class="s-pagination-item s-pagination-next s-pagination-button s-pagination-separator"]/@href').get()
+        print(f'total page = {self.total_page}')
+        if self.total_page == 0:
+            return
+            
+        yield scrapy.Request(next_page, callback=self.parse)
+
     def parse_item_detail(self, response):
-        print(response)
+        item_descs = response.xpath('//div[@id="feature-bullets"]//ul[@class="a-unordered-list a-vertical a-spacing-mini"]')
+        for item_desc in item_descs:
+            
+            print(item_desc.get())
         
     
 
