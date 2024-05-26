@@ -21,12 +21,12 @@ class KnakSpider(scrapy.Spider):
         print(table.get())
         for list_tr in table.css('tr'):
             for list_td in list_tr.css('td').css('font::text, strong::text')[5:].getall():
-                list_td = list_td.strip()
+                list_td = list_td[-7:].strip()
                 if list_td == '':
                     continue
                 if check_slash == 1:
                     # menghapus character ',' dan menyimpan kedalam value
-                    value = list_td.replace(',', '').replace('\\', '')
+                    value = list_td.replace(',', '').replace('\\', '').replace('.', '')
                     # mengurangi check_slash agar setelah cell ini tidak di ambil datanya
                     check_slash = 0
                     # check apakah valuenya kosong atau tidak
@@ -40,9 +40,9 @@ class KnakSpider(scrapy.Spider):
                             monthkey = datetime.strptime(date, '%y/%m').strftime('%Y%m')
                     product = Product(date = monthkey, value = value)
                     yield product
-                if '/' in list_td and len(list_td) <= 5:
+                if '/' in list_td and len(list_td) < 6:
                     # menambahkan check_slash 1 agar next cell akan kita ambil
-                    check_slash += 1
+                    check_slash = 1
                     # menyimpan data date
                     date = list_td
                     
