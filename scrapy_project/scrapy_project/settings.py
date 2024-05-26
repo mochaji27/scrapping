@@ -1,4 +1,4 @@
-# Scrapy settings for scrapping_scrappy project
+# Scrapy settings for scrapy_project project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,17 +7,17 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = "scrapping_scrappy"
+BOT_NAME = "scrapy_project"
 
-SPIDER_MODULES = ["scrapping_scrappy.spiders"]
-NEWSPIDER_MODULE = "scrapping_scrappy.spiders"
+SPIDER_MODULES = ["scrapy_project.spiders"]
+NEWSPIDER_MODULE = "scrapy_project.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = "scrapping_scrappy (+http://www.yourdomain.com)"
+#USER_AGENT = "scrapy_project (+http://www.yourdomain.com)"
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = False
+ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -45,28 +45,14 @@ ROBOTSTXT_OBEY = False
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    "scrapping_scrappy.middlewares.ScrappingScrappySpiderMiddleware": 543,
+#    "scrapy_project.middlewares.ScrapyProjectSpiderMiddleware": 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-DOWNLOADER_MIDDLEWARES = {
-    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
-    'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
-    'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
-    'scrapy_fake_useragent.middleware.RetryUserAgentMiddleware': 401,
-}
-
-
-FAKEUSERAGENT_PROVIDERS = [
-    'scrapy_fake_useragent.providers.FakeUserAgentProvider',  # This is the first provider we'll try
-    'scrapy_fake_useragent.providers.FakerProvider',  # If FakeUserAgentProvider fails, we'll use faker to generate a user-agent string for us
-    'scrapy_fake_useragent.providers.FixedUserAgentProvider',  # Fall back to USER_AGENT value
-]
-
-## Set Fallback User-Agent
-USER_AGENT = '<your user agent string which you will fall back to if all other providers fail>'
-
+#DOWNLOADER_MIDDLEWARES = {
+#    "scrapy_project.middlewares.ScrapyProjectDownloaderMiddleware": 543,
+#}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -77,7 +63,7 @@ USER_AGENT = '<your user agent string which you will fall back to if all other p
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    "scrapping_scrappy.pipelines.ScrappingScrappyPipeline": 300,
+#    "scrapy_project.pipelines.ScrapyProjectPipeline": 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -105,4 +91,3 @@ USER_AGENT = '<your user agent string which you will fall back to if all other p
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
-DUPEFILTER_DEBUG = True

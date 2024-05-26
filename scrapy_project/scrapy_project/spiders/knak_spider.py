@@ -13,12 +13,12 @@ class KnakSpider(scrapy.Spider):
             'https://www.knak.jp/japan/naphtha.htm'
         ]
         
-
     def parse(self, response):
         check_slash = 0
         value = ''
         date = ''
-        table = response.css('table')[9]
+        table = response.css('table')[10]
+        print(table.get())
         for list_tr in table.css('tr'):
             for list_td in list_tr.css('td').css('font::text, strong::text')[5:].getall():
                 list_td = list_td.strip()
